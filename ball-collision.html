@@ -1,5 +1,12 @@
+
 <html>
   <head>
+      <style>
+      body{
+          background-color:black;
+          overflow: hidden;
+      }
+      </style>
   <script src="p5.min.js"></script>
   </head>
   <body>
@@ -7,14 +14,21 @@
     var w = window.innerWidth;
         var h = window.innerHeight;
     var ball = new ball();
+    var ballTwo = new ballTwo();
     var d;
+    function preload(){
+      img = ('pacman.svg.png');
+    }
       function setup(){
         createCanvas(w,h);
       }
       function draw(){
-        background(255);
+        background('black');
         ball.show();
         ball.move();
+        ballTwo.show();
+        ballTwo.move();
+        ballTwo.contact()
       }
       function ball(){
        
@@ -23,8 +37,8 @@
         userWidth = 50;
         var speed = 10;
         this.show = function(){
-        fill(color('red'));
-        ellipse(this.x,this.y,userWidth,userWidth);
+        //fill(color('red'));
+        image(img,this.x,this.y,userWidth,userWidth);
         }
         this.move = function(){
           if((keyIsDown(87))&&(this.y > 0)){
@@ -34,11 +48,43 @@
             this.y += speed;
           }
           if((keyIsDown(65))&&(this.x > 0)){
+            rotate(-10);
+          }
+          if((keyIsDown(68))&&(this.x < w - userWidth)){
+            rotate(10);
+          }
+          imageMode(CENTER);
+        }
+      }
+      function ballTwo(){
+        this.x = 200;
+        this.y = 200;
+        userWidth = 50;
+        var speed  = 10;
+        this.show = function(){
+            fill(color('blue'));
+            image(pacman.png,this.x,this.y,userWidth,userWidth);
+        }
+        this.move = function(){
+            if((keyIsDown(73))&&(this.y > 0)){
+                this.y -= speed;
+            }
+            if((keyIsDown(75))&&(this.y < h - userWidth)){
+                this.y += speed;
+            }
+            if((keyIsDown(74))&&(this.x > 0)){
             this.x -= speed;
           }
-          if((keyIsDown(68))&&(this.x < w - userwidth)){
+          if((keyIsDown(76))&&(this.x < w - userWidth)){
             this.x += speed;
           }
+        }
+        this.contact = function(){
+            d= dist(this.x,this.y,ball.x,ball.y);
+            if(d < 40){
+                noLoop();
+                window.alert('Game Over');
+            }
         }
       }
     </script>
